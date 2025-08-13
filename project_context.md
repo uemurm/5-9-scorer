@@ -28,3 +28,21 @@ C:/Users/Lenovo/Upskill/Gemini/5-9-scorer/
     └───assets/
         └───react.svg
 ```
+
+## Git Status (as of Wed Aug 13 2025)
+
+**Status:**
+```
+On branch master
+nothing to commit, working tree clean
+```
+
+**Latest Commit:**
+```
+commit f799cf6e75da377a573c595be210e77db3ac7ec9
+Author: Mitsu Uemura <mitsuhide.uemura@gmail.com>
+Date:   Wed Aug 13 10:51:16 2025 +1000
+
+    "feat: Initial commit with 5-9 scorer logic"
+```
+```
