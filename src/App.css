@@ -7,16 +7,22 @@ body {
 }
 
 .app-container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   text-align: center;
 }
 
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .players-container {
   display: flex;
-  justify-content: space-around;
+  flex-direction: row;
   gap: 20px;
-  margin-bottom: 30px;
+  justify-content: center;
 }
 
 .player-card {
@@ -24,7 +30,6 @@ body {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  width: 45%;
 }
 
 .player-name-input {
@@ -38,10 +43,8 @@ body {
   margin-bottom: 15px;
 }
 
-.player-score {
-  font-size: 4em;
-  font-weight: bold;
-  margin-bottom: 20px;
+.ball-selection {
+  margin-bottom: 15px;
 }
 
 .player-controls button {
@@ -51,7 +54,8 @@ body {
   border: 1px solid #ccc;
   border-radius: 4px;
   cursor: pointer;
-  background-color: #e9e9e9;
+  background-color: #333;
+  color: white;
 }
 
 .player-controls button:hover {
@@ -66,27 +70,67 @@ body {
   border: 1px solid #c00;
   background-color: #fdd;
   color: #c00;
+  margin-top: 20px;
 }
 
 .reset-button:hover {
   background-color: #fcc;
 }
 
-.winner-announcement {
+.next-rack-button {
+  font-size: 1.2em;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background-color: #ddd;
+  color: #333;
+  margin-left: 10px;
+  margin-top: 20px;
+}
+
+.next-rack-button:hover {
+  background-color: #ccc;
+}
+
+.game-over-announcement {
   margin: 40px 0;
 }
 
-.winner-announcement h2 {
+.game-over-announcement h2 {
   font-size: 3em;
-  color: #2a9d8f;
+  color: #c00;
 }
 
-.winner-announcement button {
+.game-over-announcement button {
   font-size: 1.5em;
   padding: 15px 30px;
   cursor: pointer;
   border-radius: 8px;
   border: none;
-  background-color: #2a9d8f;
+  background-color: #c00;
   color: white;
+}
+
+.scoreboard {
+  margin-bottom: 20px;
+}
+
+.scoreboard table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.scoreboard th, .scoreboard td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.scoreboard th {
+  background-color: #f2f2f2;
+}
+
+.current-rack {
+  background-color: #e0e0e0;
 }

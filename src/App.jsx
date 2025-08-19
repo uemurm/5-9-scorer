@@ -1,35 +1,58 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './App.css';
 
-const TARGET_SCORE = 7;
+const MAX_RACKS = 5;
 
 function App() {
   const [players, setPlayers] = useState([
-    { name: 'Player 1', score: 0 },
-    { name: 'Player 2', score: 0 },
+    { name: 'Player 1', scores: Array(MAX_RACKS).fill(0), histories: Array(MAX_RACKS).fill(0).map(() => []), selectedBall: '5-ball' },
+    { name: 'Player 2', scores: Array(MAX_RACKS).fill(0), histories: Array(MAX_RACKS).fill(0).map(() => []), selectedBall: '5-ball' },
+    { name: 'Player 3', scores: Array(MAX_RACKS).fill(0), histories: Array(MAX_RACKS).fill(0).map(() => []), selectedBall: '5-ball' },
   ]);
-  const [winner, setWinner] = useState(null);
+  const [rackNumber, setRackNumber] = useState(1);
+  const [gameOver, setGameOver] = useState(false);
 
-  useEffect(() => {
-    // Check for a winner whenever scores change
-    players.forEach(player => {
-      if (player.score >= TARGET_SCORE) {
-        setWinner(player.name);
-      }
-    });
-  }, [players]);
-
-  const handleScore = (playerIndex, points) => {
-    if (winner) return; // Stop scoring if there is already a winner
-
+  const handleBallSelectionChange = (playerIndex, ball) => {
     const newPlayers = [...players];
-    newPlayers[playerIndex].score += points;
+    newPlayers[playerIndex].selectedBall = ball;
     setPlayers(newPlayers);
   };
 
-  const handleReset = () => {
-    setPlayers(players.map(p => ({ ...p, score: 0 })));
-    setWinner(null);
+  const handleScore = (playerIndex, isSidePocket) => {
+    if (gameOver) return;
+    const selectedBall = players[playerIndex].selectedBall;
+    const points = selectedBall === '5-ball' ? 1 : 2;
+    const finalPoints = isSidePocket ? points * 2 : points;
+    const pointType = selectedBall === '5-ball' ? 'I' : 'X';
+
+    const newPlayers = [...players];
+    const otherPlayers = newPlayers.filter((_, index) => index !== playerIndex);
+
+    // Add points to the scoring player
+    newPlayers[playerIndex].scores[rackNumber - 1] += finalPoints * otherPlayers.length;
+    newPlayers[playerIndex].histories[rackNumber - 1].push(pointType);
+
+
+    // Subtract points from other players
+    otherPlayers.forEach(player => {
+      player.scores[rackNumber - 1] -= finalPoints;
+    });
+
+    setPlayers(newPlayers);
+  };
+
+  const handleNewGame = () => {
+    setPlayers(players.map(p => ({ ...p, scores: Array(MAX_RACKS).fill(0), histories: Array(MAX_RACKS).fill(0).map(() => []), selectedBall: '5-ball' })));
+    setRackNumber(1);
+    setGameOver(false);
+  };
+
+  const handleNextRack = () => {
+    if (rackNumber + 1 > MAX_RACKS) {
+      setGameOver(true);
+    } else {
+      setRackNumber(rackNumber + 1);
+    }
   };
 
   const handlePlayerNameChange = (playerIndex, newName) => {
@@ -38,35 +61,83 @@ function App() {
     setPlayers(newPlayers);
   };
 
+  const totalScores = players.map(p => p.scores.reduce((a, b) => a + b, 0));
 
   return (
     <div className="app-container">
       <h1>5-9 Scorer</h1>
-      {winner ? (
-        <div className="winner-announcement">
-          <h2>{winner} Wins!</h2>
-          <button onClick={handleReset}>New Game</button>
+      {gameOver ? (
+        <div className="game-over-announcement">
+          <h2>Game Over</h2>
+          <button onClick={handleNewGame}>New Game</button>
         </div>
       ) : (
         <>
-          <div className="players-container">
-            {players.map((player, index) => (
-              <div key={index} className="player-card">
-                <input
-                  type="text"
-                  value={player.name}
-                  onChange={(e) => handlePlayerNameChange(index, e.target.value)}
-                  className="player-name-input"
-                />
-                <div className="player-score">{player.score}</div>
-                <div className="player-controls">
-                  <button onClick={() => handleScore(index, 1)}>+1 pt (9-ball)</button>
-                  <button onClick={() => handleScore(index, 2)}>+2 pts (5-ball)</button>
+          <div className="main-content">
+            <div className="scoreboard">
+              <h3>Scoreboard</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Player</th>
+                    {Array.from({ length: MAX_RACKS }, (_, i) => i + 1).map(rack => (
+                      <th key={rack} className={rack === rackNumber ? 'current-rack' : ''}>Rack {rack}</th>
+                    ))}
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {players.map((player, playerIndex) => (
+                    <tr key={playerIndex}>
+                      <td>{player.name}</td>
+                      {player.scores.map((score, rackIndex) => (
+                        <td key={rackIndex} className={rackIndex + 1 === rackNumber ? 'current-rack' : ''}>{score}</td>
+                      ))}
+                      <td>{totalScores[playerIndex]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="players-container">
+              {players.map((player, index) => (
+                <div key={index} className="player-card">
+                  <input
+                    type="text"
+                    value={player.name}
+                    onChange={(e) => handlePlayerNameChange(index, e.target.value)}
+                    className="player-name-input"
+                  />
+                  <div className="ball-selection">
+                    <label>
+                      <input
+                        type="radio"
+                        value="5-ball"
+                        checked={player.selectedBall === '5-ball'}
+                        onChange={() => handleBallSelectionChange(index, '5-ball')}
+                      />
+                      5-ball
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value="9-ball"
+                        checked={player.selectedBall === '9-ball'}
+                        onChange={() => handleBallSelectionChange(index, '9-ball')}
+                      />
+                      9-ball
+                    </label>
+                  </div>
+                  <div className="player-controls">
+                    <button onClick={() => handleScore(index, false)}>Corner</button>
+                    <button onClick={() => handleScore(index, true)}>Side</button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-          <button onClick={handleReset} className="reset-button">Reset Game</button>
+          <button onClick={handleNextRack} className="next-rack-button">Next Rack</button>
+          <button onClick={handleNewGame} className="reset-button">Reset Game</button>
         </>
       )}
     </div>
