@@ -134,3 +134,17 @@ body {
 .current-rack {
   background-color: #e0e0e0;
 }
+
+/* Make the vertical separator between the last rack and the Total column a double line.
+   Use nth-last-child(2) to target the second-to-last cell in each row so this works
+   regardless of how many rack columns are present. Remove the left border on the
+   Total column so the double border displays cleanly. */
+.scoreboard th:nth-last-child(2),
+.scoreboard td:nth-last-child(2) {
+  border-right: 4px double #333;
+}
+
+.scoreboard th:nth-last-child(1),
+.scoreboard td:nth-last-child(1) {
+  border-left: none;
+}
