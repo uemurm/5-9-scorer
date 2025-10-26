@@ -5,9 +5,9 @@ const MAX_RACKS = 5;
 
 function App() {
   const [players, setPlayers] = useState([
-    { name: 'Player 1', scores: Array(MAX_RACKS).fill(0), histories: Array(MAX_RACKS).fill(0).map(() => []), selectedBall: '5-ball' },
-    { name: 'Player 2', scores: Array(MAX_RACKS).fill(0), histories: Array(MAX_RACKS).fill(0).map(() => []), selectedBall: '5-ball' },
-    { name: 'Player 3', scores: Array(MAX_RACKS).fill(0), histories: Array(MAX_RACKS).fill(0).map(() => []), selectedBall: '5-ball' },
+    { name: 'Player 1', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball' },
+    { name: 'Player 2', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball' },
+    { name: 'Player 3', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball' },
   ]);
   const [rackNumber, setRackNumber] = useState(1);
   const [gameOver, setGameOver] = useState(false);
@@ -23,14 +23,13 @@ function App() {
     const selectedBall = players[playerIndex].selectedBall;
     const points = selectedBall === '5-ball' ? 1 : 2;
     const finalPoints = isSidePocket ? points * 2 : points;
-    const pointType = selectedBall === '5-ball' ? 'I' : 'X';
+    
 
     const newPlayers = [...players];
     const otherPlayers = newPlayers.filter((_, index) => index !== playerIndex);
 
-    // Add points to the scoring player
-    newPlayers[playerIndex].scores[rackNumber - 1] += finalPoints * otherPlayers.length;
-    newPlayers[playerIndex].histories[rackNumber - 1].push(pointType);
+  // Add points to the scoring player
+  newPlayers[playerIndex].scores[rackNumber - 1] += finalPoints * otherPlayers.length;
 
 
     // Subtract points from other players
@@ -42,7 +41,7 @@ function App() {
   };
 
   const handleNewGame = () => {
-    setPlayers(players.map(p => ({ ...p, scores: Array(MAX_RACKS).fill(0), histories: Array(MAX_RACKS).fill(0).map(() => []), selectedBall: '5-ball' })));
+  setPlayers(players.map(p => ({ ...p, scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball' })));
     setRackNumber(1);
     setGameOver(false);
   };
