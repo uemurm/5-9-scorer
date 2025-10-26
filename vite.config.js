@@ -7,4 +7,5 @@ export default defineConfig({
   server: {
     host: true,
   },
+  base: '/5-9-scorer/',
 })
