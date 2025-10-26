@@ -5,9 +5,9 @@ const MAX_RACKS = 5;
 
 function App() {
   const [players, setPlayers] = useState([
-    { name: 'Player 1', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball' },
-    { name: 'Player 2', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball' },
-    { name: 'Player 3', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball' },
+    { name: 'Player 1', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball', pocketHistory: Array(MAX_RACKS).fill().map(() => []) },
+    { name: 'Player 2', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball', pocketHistory: Array(MAX_RACKS).fill().map(() => []) },
+    { name: 'Player 3', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball', pocketHistory: Array(MAX_RACKS).fill().map(() => []) },
   ]);
   const [rackNumber, setRackNumber] = useState(1);
   const [gameOver, setGameOver] = useState(false);
@@ -25,12 +25,18 @@ function App() {
     const finalPoints = isSidePocket ? points * 2 : points;
     
 
-    const newPlayers = [...players];
+    // clone players and pocketHistory arrays to avoid mutating state
+    const newPlayers = players.map(p => ({ ...p, pocketHistory: p.pocketHistory ? p.pocketHistory.map(d => [...d]) : Array(MAX_RACKS).fill().map(() => []) }));
     const otherPlayers = newPlayers.filter((_, index) => index !== playerIndex);
 
-  // Add points to the scoring player
-  newPlayers[playerIndex].scores[rackNumber - 1] += finalPoints * otherPlayers.length;
+    // Add points to the scoring player
+    newPlayers[playerIndex].scores[rackNumber - 1] += finalPoints * otherPlayers.length;
 
+    // append the two-letter code for this event (5S, 5C, 9S, 9C)
+    const ballShort = selectedBall.startsWith('5') ? '5' : selectedBall.startsWith('9') ? '9' : selectedBall.charAt(0);
+    const pocketShort = isSidePocket ? 'S' : 'C';
+    const code = `${ballShort}${pocketShort}`;
+    newPlayers[playerIndex].pocketHistory[rackNumber - 1].push(code);
 
     // Subtract points from other players
     otherPlayers.forEach(player => {
@@ -41,7 +47,7 @@ function App() {
   };
 
   const handleNewGame = () => {
-  setPlayers(players.map(p => ({ ...p, scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball' })));
+  setPlayers(players.map(p => ({ ...p, scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball', pocketHistory: Array(MAX_RACKS).fill().map(() => []) })));
     setRackNumber(1);
     setGameOver(false);
   };
@@ -89,9 +95,19 @@ function App() {
                   {players.map((player, playerIndex) => (
                     <tr key={playerIndex}>
                       <td>{player.name}</td>
-                      {player.scores.map((score, rackIndex) => (
-                        <td key={rackIndex} className={rackIndex + 1 === rackNumber ? 'current-rack' : ''}>{score}</td>
-                      ))}
+                      {player.scores.map((score, rackIndex) => {
+                        const pocketArr = player.pocketHistory && player.pocketHistory[rackIndex] ? player.pocketHistory[rackIndex] : [];
+                        return (
+                          <td key={rackIndex} className={(rackIndex + 1 === rackNumber ? 'current-rack ' : '') + 'score-cell'}>
+                            <div className="cell-top">{score}</div>
+                            <div className="cell-bottom">
+                              {pocketArr.map((d, i) => (
+                                <span key={i} className="code-badge">{d}</span>
+                              ))}
+                            </div>
+                          </td>
+                        );
+                      })}
                       <td>{totalScores[playerIndex]}</td>
                     </tr>
                   ))}

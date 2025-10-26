@@ -148,3 +148,46 @@ body {
 .scoreboard td:nth-last-child(1) {
   border-left: none;
 }
+
+/* Split a rack cell vertically: top = score, bottom = compact two-letter codes */
+.scoreboard .score-cell {
+  padding: 0; /* inner blocks handle padding */
+  vertical-align: middle;
+}
+
+.scoreboard .cell-top {
+  padding: 8px;
+  font-weight: 700;
+  background: #fff;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.scoreboard .cell-bottom {
+  padding: 6px 8px;
+  background: #fbfbfb;
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.code-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 22px;
+  background: #e9f5ff;
+  color: #0366d6;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 700;
+  padding: 0 6px;
+}
+
+/* ensure borders remain consistent with the double-line separator */
+.scoreboard td.score-cell, .scoreboard th.score-cell {
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
