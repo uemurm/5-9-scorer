@@ -135,6 +135,40 @@ body {
   background-color: #e0e0e0;
 }
 
+/* Make the current rack column more prominent: accent stripe + bolder text */
+.scoreboard th.current-rack,
+.scoreboard td.current-rack {
+  background: linear-gradient(180deg, #fff8e6, #fff0cc);
+  font-weight: 800;
+  color: #5a3200;
+  position: relative; /* for pseudo-element accent */
+  transition: box-shadow 120ms ease, transform 120ms ease;
+}
+
+.scoreboard td.current-rack {
+  box-shadow: inset 0 0 0 2px rgba(255,184,77,0.06);
+}
+
+.scoreboard th.current-rack::before,
+.scoreboard td.current-rack::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
+  background: #ffb84d;
+  border-radius: 2px;
+}
+
+.scoreboard th.current-rack::before { top: 0; bottom: 0; }
+
+/* Slight hover/active feedback for current rack cells */
+.scoreboard td.current-rack:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+}
+
 /* Make the vertical separator between the last rack and the Total column a double line.
    Use nth-last-child(2) to target the second-to-last cell in each row so this works
    regardless of how many rack columns are present. Remove the left border on the

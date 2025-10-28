@@ -1,8 +1,25 @@
 # Development Journal
 
+## Todo
+
+* [ ] Make the current rack stand out.
+* [ ] Set up configuration page and make this app a two-screen app.
+* [ ] Configure
+  * [ ] Player names
+  * [ ] Player order
+  * [ ] Reverse order
+  * [ ] Rack count
+  * [ ] Point balls for each player
+
+## 2025-10-28 Tue
+
+    
+
 ## 2025-10-26 Sun
 
 Divide each cell in two rows and print pocket history in the lower row.
+
+Pushed to `origin/gh-pages` and deployed.
 
 ## 2025-08-19 Tue
 
