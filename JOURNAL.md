@@ -4,6 +4,7 @@
 
 * [ ] Make the current rack stand out.
 * [ ] Set up configuration page and make this app a two-screen app.
+* [ ] Select current player by drop-down list and re-arrange components.
 * [ ] Configure
   * [ ] Player names
   * [ ] Player order
