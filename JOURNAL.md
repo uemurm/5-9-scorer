@@ -4,17 +4,18 @@
 
 * [x] Make the current rack stand out.
 * [x] Set up configuration page and make this app a two-screen app.
-* [ ] Select current player by drop-down list and re-arrange components.
+* [x] Select current player by drop-down list and re-arrange components.
 * [ ] Configure
   * [x] Player names
-  * [ ] Player order
+  * [x] Player order
   * [ ] Reverse order
-  * [ ] Rack count
-  * [ ] Point balls for each player
+  * [x] Rack count
+  * [x] Point balls for each player
 
 ## 2025-10-31 Fri
 - Develop setup page and make this app a two-screen app.
-- Configure Player names.
+- Configure Player names, Player order, Rack count, and Point balls for each player.
+- Select current player by drop-down list and re-arrange components.
 
 ## 2025-10-29 Wed
 Github Pages にデプロイするために`gh-pages`のインストール、`package.json`や`vite.config.js`の変更を、誤って`gh-pages`ブランチで行ってしまったので、そのリカバリーが大変だった。
