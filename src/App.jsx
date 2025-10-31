@@ -4,11 +4,17 @@ import './App.css';
 const MAX_RACKS = 5;
 
 function App() {
+  // page: 'setup' | 'game'
+  const [page, setPage] = useState('setup');
+
   const [players, setPlayers] = useState([
     { name: 'Player 1', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball', pocketHistory: Array(MAX_RACKS).fill().map(() => []) },
     { name: 'Player 2', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball', pocketHistory: Array(MAX_RACKS).fill().map(() => []) },
     { name: 'Player 3', scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball', pocketHistory: Array(MAX_RACKS).fill().map(() => []) },
   ]);
+
+  // setup state: temporary list of player names (order matters)
+  const [setupPlayers, setSetupPlayers] = useState(['Player 1', 'Player 2', 'Player 3']);
   const [rackNumber, setRackNumber] = useState(1);
   const [gameOver, setGameOver] = useState(false);
 
@@ -16,6 +22,43 @@ function App() {
     const newPlayers = [...players];
     newPlayers[playerIndex].selectedBall = ball;
     setPlayers(newPlayers);
+  };
+
+  // Setup page helpers
+  const setNumPlayers = (n) => {
+    const newSetup = [...setupPlayers];
+    while (newSetup.length < n) newSetup.push(`Player ${newSetup.length + 1}`);
+    while (newSetup.length > n) newSetup.pop();
+    setSetupPlayers(newSetup);
+  };
+
+  const handleSetupNameChange = (index, name) => {
+    const s = [...setupPlayers];
+    s[index] = name;
+    setSetupPlayers(s);
+  };
+
+  const moveSetupPlayer = (index, dir) => {
+    const s = [...setupPlayers];
+    const swapIndex = index + dir;
+    if (swapIndex < 0 || swapIndex >= s.length) return;
+    [s[index], s[swapIndex]] = [s[swapIndex], s[index]];
+    setSetupPlayers(s);
+  };
+
+  const startGame = () => {
+    // initialize players state from setupPlayers
+    const initial = setupPlayers.map(name => ({ name, scores: Array(MAX_RACKS).fill(0), selectedBall: '5-ball', pocketHistory: Array(MAX_RACKS).fill().map(() => []) }));
+    setPlayers(initial);
+    setRackNumber(1);
+    setGameOver(false);
+    setPage('game');
+  };
+
+  const backToSetup = () => {
+    // populate setupPlayers from current players
+    setSetupPlayers(players.map(p => p.name));
+    setPage('setup');
   };
 
   const handleScore = (playerIndex, isSidePocket) => {
@@ -68,9 +111,47 @@ function App() {
 
   const totalScores = players.map(p => p.scores.reduce((a, b) => a + b, 0));
 
+  if (page === 'setup') {
+    return (
+      <div className="app-container">
+        <h1>5-9 Scorer — Setup</h1>
+        <div className="setup-panel">
+          <label>
+            Number of players: 
+            <select value={setupPlayers.length} onChange={(e) => setNumPlayers(Number(e.target.value))}>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={4}>4</option>
+              <option value={5}>5</option>
+            </select>
+          </label>
+
+          <div className="setup-players">
+            {setupPlayers.map((name, i) => (
+              <div key={i} className="setup-player-row">
+                <input value={name} onChange={(e) => handleSetupNameChange(i, e.target.value)} />
+                <div className="setup-controls">
+                  <button onClick={() => moveSetupPlayer(i, -1)} disabled={i === 0}>↑</button>
+                  <button onClick={() => moveSetupPlayer(i, 1)} disabled={i === setupPlayers.length - 1}>↓</button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ marginTop: 12 }}>
+            <button onClick={startGame} className="next-rack-button">Start Game →</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-container">
       <h1>5-9 Scorer</h1>
+      <div style={{ marginBottom: 8 }}>
+        <button onClick={backToSetup} className="reset-button">Back to Setup</button>
+      </div>
       {gameOver ? (
         <div className="game-over-announcement">
           <h2>Game Over</h2>

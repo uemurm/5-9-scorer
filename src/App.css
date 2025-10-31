@@ -225,3 +225,34 @@ body {
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
 }
+
+/* Setup page styles */
+.setup-panel {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.setup-players {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setup-player-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.setup-player-row input {
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.setup-controls button {
+  margin-left: 6px;
+}
