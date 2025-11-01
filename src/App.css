@@ -88,10 +88,11 @@ body {
     min-width: 120px;
   }
   .scoring-panel select {
-    padding: 6px 12px;
+    padding: 8px 16px;
     border-radius: 4px;
     border: 1px solid #ccc;
-    font-size: 14px;
+    font-size: 1.3em;
+    min-width: 120px;
   }
   .scoring-panel .ball-selection {
     display: flex;
@@ -182,13 +183,14 @@ body {
   background-color: #ddd;
 }
 
+/* --- Reset Gameボタン右下固定 --- */
 .reset-button {
-  font-size: 0.9em;
-  padding: 6px 12px;
+  font-size: 1em;
+  padding: 10px 20px;
   cursor: pointer;
   border-radius: 4px;
   border: 1px solid #666;
-  background-color: transparent;
+  background-color: #fff;
   color: #666;
   position: fixed;
   right: 24px;
@@ -197,8 +199,60 @@ body {
   z-index: 10;
 }
 
-.reset-button:hover {
-  background-color: #fcc;
+/* Back to SetupボタンをタイトルとScoreboardの間の左端に、Reset Gameボタンと同じサイズで */
+.reset-button.back-setup {
+  position: absolute;
+  left: 0;
+  width: 150px;
+  height: 50px;
+  top: 90px; /* タイトルとScoreboardの間の高さ。必要に応じて微調整 */
+  font-size: 1em;
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 1px solid #666;
+  color: #666;
+  z-index: 10;
+}
+
+/* タイトル中央揃え */
+.app-container h1 {
+  display: block;
+  text-align: center;
+  margin: 0 auto 16px auto;
+}
+
+/* 得点ボールを丸囲み数字バッジで表示 */
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f3f3f3;
+  border: 2px solid #bbb;
+  font-weight: 700;
+  font-size: 1.1em;
+  color: #333;
+  margin-right: 6px;
+}
+
+/* 得点ボールバッジを2/3サイズに */
+.score-badge {
+  width: 21px;
+  height: 21px;
+  font-size: 0.73em;
+  margin-right: 4px;
+  border-width: 1.5px;
+}
+
+/* Next RackボタンをCorner/Sideボタンと同じ高さ右端に */
+.next-rack-button.inline {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateY(0);
+  margin: 0;
 }
 
 .next-rack-button {

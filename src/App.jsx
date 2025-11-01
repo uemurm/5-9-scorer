@@ -32,9 +32,9 @@ function App() {
   };
 
   const [players, setPlayers] = useState([
-    { name: 'Player 1', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
-    { name: 'Player 2', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
-    { name: 'Player 3', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
+    { name: '鈴木', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
+    { name: '山梨', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
+    { name: '植村', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
   ]);
 
   // Score page: currently active player for scoring and selected scoring ball
@@ -49,9 +49,9 @@ function App() {
 
   // setup state: temporary list of players with names and selected balls (order matters)
   const [setupPlayers, setSetupPlayers] = useState([
-    { name: 'Player 1', selectedBallSet: ['5-ball', '9-ball'] },
-    { name: 'Player 2', selectedBallSet: ['5-ball', '9-ball'] },
-    { name: 'Player 3', selectedBallSet: ['5-ball', '9-ball'] },
+    { name: '鈴木', selectedBallSet: ['5-ball', '9-ball'] },
+    { name: '山梨', selectedBallSet: ['5-ball', '9-ball'] },
+    { name: '植村', selectedBallSet: ['5-ball', '9-ball'] },
   ]);
   const [rackNumber, setRackNumber] = useState(1);
   const [gameOver, setGameOver] = useState(false);
@@ -216,7 +216,7 @@ function App() {
           </div>
 
           <div style={{ marginTop: 12 }}>
-            <button onClick={startGame} className="next-rack-button">Start Game →</button>
+            <button onClick={startGame} className="next-rack-button">Go to Game →</button>
           </div>
         </div>
       </div>
@@ -225,89 +225,90 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>5-9 Scorer</h1>
-      <button onClick={backToSetup} className="reset-button" style={{left: 16, top: 16, right: 'auto', bottom: 'auto', position: 'absolute'}}>Back to Setup</button>
-      {gameOver ? (
-        <div className="game-over-announcement">
-          <h2>Game Over</h2>
-          <button onClick={handleNewGame}>New Game</button>
-        </div>
-      ) : (
-        <>
-          <div className="main-content">
-            <div className="scoreboard">
-              <h3>Scoreboard</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Player</th>
-                    {Array.from({ length: maxRacks }, (_, i) => i + 1).map(rack => (
-                      <th key={rack} className={rack === rackNumber ? 'current-rack' : ''}>Rack {rack}</th>
-                    ))}
-                    <th>Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {players.map((player, playerIndex) => (
-                    <tr key={playerIndex}>
-                      <td>{player.name}</td>
-                      {player.scores.map((score, rackIndex) => {
-                        const pocketArr = player.pocketHistory && player.pocketHistory[rackIndex] ? player.pocketHistory[rackIndex] : [];
-                        return (
-                          <td key={rackIndex} className={(rackIndex + 1 === rackNumber ? 'current-rack ' : '') + 'score-cell'}>
-                            <div className="cell-top">{score}</div>
-                            <div className="cell-bottom">
-                              {pocketArr.map((d, i) => (
-                                <span key={i} className="code-badge">{d}</span>
-                              ))}
-                            </div>
-                          </td>
-                        );
-                      })}
-                      <td>{totalScores[playerIndex]}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="players-container">
-              <div className="scoring-panel">
-                {/* 水平方向に3要素を並べる */}
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', gap: '24px', justifyContent: 'center'}}>
-                  <label style={{margin: 0, display: 'flex', alignItems: 'center', gap: '8px', minWidth: '120px'}}>
-                    Player:
-                    <select value={activePlayerIndex} onChange={(e) => setActivePlayerIndex(Number(e.target.value))}>
-                      {players.map((p, i) => (
-                        <option key={i} value={i}>{p.name}</option>
+      <h1 style={{textAlign: 'center', margin: '0 auto 16px auto'}}>
+        5-9 Scorer
+      </h1>
+      <button onClick={backToSetup} className="reset-button back-setup">Back to Setup</button>
+      <div className="main-content">
+        <div className="scoreboard">
+          <h3>Scoreboard</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Player</th>
+                {Array.from({ length: maxRacks }, (_, i) => i + 1).map(rack => (
+                  <th key={rack} className={rack === rackNumber ? 'current-rack' : ''}>Rack {rack}</th>
+                ))}
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {players.map((player, playerIndex) => (
+                <tr key={playerIndex}>
+                  <td>
+                    <div>{player.name}</div>
+                    <div style={{marginTop: 4}}>
+                      {player.selectedBallSet.map(b => (
+                        <span key={b} className="score-badge">{b.replace('-ball','')}</span>
                       ))}
-                    </select>
+                    </div>
+                  </td>
+                  {player.scores.map((score, rackIndex) => {
+                    const pocketArr = player.pocketHistory && player.pocketHistory[rackIndex] ? player.pocketHistory[rackIndex] : [];
+                    return (
+                      <td key={rackIndex} className={(rackIndex + 1 === rackNumber ? 'current-rack ' : '') + 'score-cell'}>
+                        <div className="cell-top">{score}</div>
+                        <div className="cell-bottom">
+                          {pocketArr.map((d, i) => (
+                            <span key={i} className="code-badge">{d}</span>
+                          ))}
+                        </div>
+                      </td>
+                    );
+                  })}
+                  <td>{totalScores[playerIndex]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="players-container">
+          <div className="scoring-panel" style={{position: 'relative'}}>
+            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', gap: '24px', justifyContent: 'center', position: 'relative'}}>
+              <label style={{margin: 0, display: 'flex', alignItems: 'center', gap: '8px', minWidth: '180px'}}>
+                Player:
+                <select value={activePlayerIndex} onChange={(e) => setActivePlayerIndex(Number(e.target.value))} style={{fontSize: '1.3em', padding: '8px 16px', minWidth: '120px'}}>
+                  {players.map((p, i) => (
+                    <option key={i} value={i}>{p.name}</option>
+                  ))}
+                </select>
+              </label>
+              <div className="ball-selection" style={{display: 'flex', gap: '8px', alignItems: 'center', padding: '0 12px', borderLeft: '1px solid #eee', borderRight: '1px solid #eee'}}>
+                {(players[activePlayerIndex]?.selectedBallSet || ['5-ball','9-ball']).map(b => (
+                  <label key={b} className={`badge-radio ${activeScoringBall === b ? 'selected' : ''}`}>
+                    <input
+                      type="radio"
+                      name="scoringBall"
+                      value={b}
+                      checked={activeScoringBall === b}
+                      onChange={() => setActiveScoringBall(b)}
+                    />
+                    <span className="badge-text">{b.charAt(0)}</span>
                   </label>
-                  <div className="ball-selection" style={{display: 'flex', gap: '8px', alignItems: 'center', padding: '0 12px', borderLeft: '1px solid #eee', borderRight: '1px solid #eee'}}>
-                    {(players[activePlayerIndex]?.selectedBallSet || ['5-ball','9-ball']).map(b => (
-                      <label key={b} className={`badge-radio ${activeScoringBall === b ? 'selected' : ''}`}>
-                        <input
-                          type="radio"
-                          name="scoringBall"
-                          value={b}
-                          checked={activeScoringBall === b}
-                          onChange={() => setActiveScoringBall(b)}
-                        />
-                        <span className="badge-text">{b.charAt(0)}</span>
-                      </label>
-                    ))}
-                  </div>
-                  <div className="player-controls" style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
-                    <button onClick={() => handleScore(activePlayerIndex, false, activeScoringBall)}>Corner</button>
-                    <button onClick={() => handleScore(activePlayerIndex, true, activeScoringBall)}>Side</button>
-                  </div>
-                </div>
+                ))}
               </div>
+              <div className="player-controls" style={{display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center'}}>
+                <button onClick={() => handleScore(activePlayerIndex, false, activeScoringBall)}>Corner</button>
+                <button onClick={() => handleScore(activePlayerIndex, true, activeScoringBall)}>Side</button>
+              </div>
+              <button onClick={handleNextRack} className="next-rack-button inline">Next Rack</button>
             </div>
           </div>
-          <button onClick={handleNextRack} className="next-rack-button">Next Rack</button>
-          <button onClick={handleNewGame} className="reset-button" style={{right: 24, bottom: 24, left: 'auto', top: 'auto', position: 'fixed'}}>Reset Game</button>
-        </>
-      )}
+        </div>
+      </div>
+      <button onClick={() => {
+        if(window.confirm('本当にリセットしますか？')) handleNewGame();
+      }} className="reset-button">Reset Game</button>
     </div>
   );
 }
