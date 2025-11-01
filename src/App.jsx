@@ -226,9 +226,7 @@ function App() {
   return (
     <div className="app-container">
       <h1>5-9 Scorer</h1>
-      <div style={{ marginBottom: 8 }}>
-        <button onClick={backToSetup} className="reset-button">Back to Setup</button>
-      </div>
+      <button onClick={backToSetup} className="reset-button" style={{left: 16, top: 16, right: 'auto', bottom: 'auto', position: 'absolute'}}>Back to Setup</button>
       {gameOver ? (
         <div className="game-over-announcement">
           <h2>Game Over</h2>
@@ -273,43 +271,41 @@ function App() {
               </table>
             </div>
             <div className="players-container">
-              {/* Scoring controls: choose player, pick ball from their preset, then Corner/Side */}
               <div className="scoring-panel">
-                <label>
-                  Player:
-                  <select value={activePlayerIndex} onChange={(e) => setActivePlayerIndex(Number(e.target.value))}>
-                    {players.map((p, i) => (
-                      <option key={i} value={i}>{p.name}</option>
+                {/* 水平方向に3要素を並べる */}
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', gap: '24px', justifyContent: 'center'}}>
+                  <label style={{margin: 0, display: 'flex', alignItems: 'center', gap: '8px', minWidth: '120px'}}>
+                    Player:
+                    <select value={activePlayerIndex} onChange={(e) => setActivePlayerIndex(Number(e.target.value))}>
+                      {players.map((p, i) => (
+                        <option key={i} value={i}>{p.name}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <div className="ball-selection" style={{display: 'flex', gap: '8px', alignItems: 'center', padding: '0 12px', borderLeft: '1px solid #eee', borderRight: '1px solid #eee'}}>
+                    {(players[activePlayerIndex]?.selectedBallSet || ['5-ball','9-ball']).map(b => (
+                      <label key={b} className={`badge-radio ${activeScoringBall === b ? 'selected' : ''}`}>
+                        <input
+                          type="radio"
+                          name="scoringBall"
+                          value={b}
+                          checked={activeScoringBall === b}
+                          onChange={() => setActiveScoringBall(b)}
+                        />
+                        <span className="badge-text">{b.charAt(0)}</span>
+                      </label>
                     ))}
-                  </select>
-                </label>
-
-                <div className="ball-selection">
-                  {(players[activePlayerIndex]?.selectedBallSet || ['5-ball','9-ball']).map(b => (
-                    <label key={b} className={`badge-radio ${activeScoringBall === b ? 'selected' : ''}`}>
-                      <input
-                        type="radio"
-                        name="scoringBall"
-                        value={b}
-                        checked={activeScoringBall === b}
-                        onChange={() => setActiveScoringBall(b)}
-                      />
-                      <span className="badge-text">{b.charAt(0)}</span>
-                    </label>
-                  ))}
-                </div>
-
-                <div className="player-controls">
-                  <button onClick={() => handleScore(activePlayerIndex, false, activeScoringBall)}>Corner</button>
-                  <button onClick={() => handleScore(activePlayerIndex, true, activeScoringBall)}>Side</button>
+                  </div>
+                  <div className="player-controls" style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
+                    <button onClick={() => handleScore(activePlayerIndex, false, activeScoringBall)}>Corner</button>
+                    <button onClick={() => handleScore(activePlayerIndex, true, activeScoringBall)}>Side</button>
+                  </div>
                 </div>
               </div>
-
-              {/* Player summary cards removed from Score page (Setup page is the source of truth for names and presets) */}
             </div>
           </div>
           <button onClick={handleNextRack} className="next-rack-button">Next Rack</button>
-          <button onClick={handleNewGame} className="reset-button">Reset Game</button>
+          <button onClick={handleNewGame} className="reset-button" style={{right: 24, bottom: 24, left: 'auto', top: 'auto', position: 'fixed'}}>Reset Game</button>
         </>
       )}
     </div>
