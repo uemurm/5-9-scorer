@@ -43,3 +43,7 @@ Pushed to `origin/gh-pages` and deployed.
 ## 2025-08-15 Fri
 
 - let users select between 9-ball and 5-ball by radio buttons then click a button of Side or Corner pocket. the control is displayed for each player.
+
+## References
+https://billikinhp.mu-sashi.com/page199.html
+https://xn--cue-293b9b3g8b4c.net/1903.html
