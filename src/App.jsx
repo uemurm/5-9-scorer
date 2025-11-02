@@ -95,16 +95,26 @@ function App() {
   };
 
   const startGame = () => {
-    // initialize players state from setupPlayers
-    const initial = setupPlayers.map(p => ({ 
-      name: p.name, 
-      scores: Array(maxRacks).fill(0), 
-      selectedBallSet: p.selectedBallSet || ['5-ball', '9-ball'], 
-      pocketHistory: Array(maxRacks).fill().map(() => []) 
-    }));
-    setPlayers(initial);
-    setRackNumber(1);
-    setGameOver(false);
+    // プレイヤー構成（人数、名前、順番、ボールセット）が変更されたかチェック
+    const configChanged = setupPlayers.length !== players.length ||
+      setupPlayers.some((p, i) =>
+        p.name !== players[i].name ||
+        !arraysEqual(p.selectedBallSet, players[i].selectedBallSet)
+      );
+
+    // 構成が変更されているか、まだゲームが始まっていない場合のみ状態を初期化
+    if (configChanged || players.length === 0) {
+      const initial = setupPlayers.map(p => ({
+        name: p.name,
+        scores: Array(maxRacks).fill(0),
+        selectedBallSet: p.selectedBallSet || ['5-ball', '9-ball'],
+        pocketHistory: Array(maxRacks).fill().map(() => [])
+      }));
+      setPlayers(initial);
+      setRackNumber(1);
+      setGameOver(false);
+    }
+    // 構成に変更がなければ、既存のゲーム状態を維持したままページを切り替えるだけ
     setPage('game');
   };
 

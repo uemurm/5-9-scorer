@@ -12,6 +12,9 @@
   * [x] Rack count
   * [x] Point balls for each player
 
+## 2025-11-02 Sun
+MSYS2 をインストールして fish shell を Windows Terminal で使えるようにしたら、HTTP アクセスする度にエラーが出る。MSYS2 で `npm install` した時に以前にインストールしたパッケージを干渉してしまっているので、もとに戻したうえで、コマンド・プロンプトで開発を続けることにした。
+
 ## 2025-10-31 Fri
 - Develop setup page and make this app a two-screen app.
 - Configure Player names, Player order, Rack count, and Point balls for each player.
