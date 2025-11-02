@@ -55,6 +55,7 @@ function App() {
   ]);
   const [rackNumber, setRackNumber] = useState(1);
   const [gameOver, setGameOver] = useState(false);
+  const [lastScoreAction, setLastScoreAction] = useState(null);
 
   // Note: in-game cycling of presets is intentionally disabled — presets are changed on Setup page only.
 
@@ -122,6 +123,22 @@ function App() {
     // populate setupPlayers from current players
     setSetupPlayers(players.map(p => ({ name: p.name, selectedBallSet: p.selectedBallSet || ['5-ball', '9-ball'] })));
     setPage('setup');
+    setLastScoreAction(null); // Clear undo history when going to setup
+  };
+
+  const handleUndo = () => {
+    if (!lastScoreAction) return;
+
+    const newPlayers = [...players];
+    const { playerIndex, finalPoints, otherPlayerIndices, previousActiveScoringBall } = lastScoreAction;
+
+    newPlayers[playerIndex].scores[rackNumber - 1] -= finalPoints * otherPlayerIndices.length;
+    newPlayers[playerIndex].pocketHistory[rackNumber - 1].pop();
+    otherPlayerIndices.forEach(idx => { newPlayers[idx].scores[rackNumber - 1] += finalPoints; });
+
+    setPlayers(newPlayers);
+    setActiveScoringBall(previousActiveScoringBall);
+    setLastScoreAction(null); // Only one level of undo
   };
 
   const handleScore = (playerIndex, isSidePocket, scoringBall) => {
@@ -130,7 +147,17 @@ function App() {
     const ballToUse = scoringBall || getRepresentativeBall(players[playerIndex].selectedBallSet || ['5-ball','9-ball']);
     const points = BALLS.find(b => b.id === ballToUse)?.basePoints || 1;
     const finalPoints = isSidePocket ? points * 2 : points;
-    
+
+    // Store action for undo
+    const otherPlayerIndices = players.map((_, i) => i).filter(i => i !== playerIndex);
+    setLastScoreAction({
+      playerIndex,
+      isSidePocket,
+      scoringBall: ballToUse,
+      finalPoints,
+      otherPlayerIndices,
+      previousActiveScoringBall: activeScoringBall,
+    });
 
     // clone players and pocketHistory arrays to avoid mutating state
     const newPlayers = players.map(p => ({ ...p, pocketHistory: p.pocketHistory ? p.pocketHistory.map(d => [...d]) : Array(maxRacks).fill().map(() => []) }));
@@ -167,6 +194,7 @@ function App() {
   const handleNewGame = () => {
   // Reset only scores and pocket history. Keep player names and their selected presets from Setup.
   setPlayers(players.map(p => ({ ...p, scores: Array(maxRacks).fill(0), pocketHistory: Array(maxRacks).fill().map(() => []) })));
+    setLastScoreAction(null);
     setRackNumber(1);
     setGameOver(false);
   };
@@ -176,6 +204,7 @@ function App() {
       setGameOver(true);
     } else {
       setRackNumber(rackNumber + 1);
+      setLastScoreAction(null); // Clear undo history on next rack
     }
   };
 
@@ -311,6 +340,7 @@ function App() {
                 <button onClick={() => handleScore(activePlayerIndex, false, activeScoringBall)}>Corner</button>
                 <button onClick={() => handleScore(activePlayerIndex, true, activeScoringBall)}>Side</button>
               </div>
+              <button onClick={handleUndo} className="undo-button" disabled={!lastScoreAction}>Undo</button>
               <button onClick={handleNextRack} className="next-rack-button inline">Next Rack</button>
             </div>
           </div>

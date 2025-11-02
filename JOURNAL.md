@@ -5,6 +5,7 @@
 * [x] Make the current rack stand out.
 * [x] Set up configuration page and make this app a two-screen app.
 * [x] Select current player by drop-down list and re-arrange components.
+* [ ] Undo score inputs.
 * [ ] Show start time
 * [ ] Configure
   * [x] Player names

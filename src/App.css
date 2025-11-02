@@ -253,6 +253,21 @@ body {
   margin: 0;
 }
 
+.undo-button {
+  font-size: 1em;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f0ad4e;
+  color: white;
+}
+
+.undo-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .next-rack-button {
   font-size: 1.2em;
   padding: 10px 20px;
