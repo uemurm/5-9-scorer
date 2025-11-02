@@ -330,6 +330,7 @@ body {
 .scoreboard th.current-rack,
 .scoreboard td.current-rack {
   background: linear-gradient(180deg, #fff8e6, #fff0cc);
+  background: linear-gradient(180deg, #ffe494, #ffc94d);
   font-weight: 800;
   color: #5a3200;
   position: relative; /* for pseudo-element accent */
