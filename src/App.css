@@ -329,16 +329,30 @@ body {
 /* Make the current rack column more prominent: accent stripe + bolder text */
 .scoreboard th.current-rack,
 .scoreboard td.current-rack {
-  background: linear-gradient(180deg, #fff8e6, #fff0cc);
+  background: linear-gradient(180deg, #fff5d6, #ffebac);
   background: linear-gradient(180deg, #ffe494, #ffc94d);
   font-weight: 800;
   color: #5a3200;
   position: relative; /* for pseudo-element accent */
   transition: box-shadow 120ms ease, transform 120ms ease;
+  animation: pulse-rack 2s infinite;
 }
 
 .scoreboard td.current-rack {
-  box-shadow: inset 0 0 0 2px rgba(255,184,77,0.06);
+  /* Add a subtle inset shadow and an outer border-like shadow to make the column pop */ }
+.scoreboard th.current-rack, .scoreboard td.current-rack {
+  box-shadow: inset 0 0 0 1px rgba(255, 184, 77, 0.5), 
+              0 0 0 2px #ffb84d;
+}
+.multiplier-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  background-color: #c00;
+  color: white;
+  font-size: 0.8em;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
 .scoreboard th.current-rack::before,
@@ -358,7 +372,14 @@ body {
 /* Slight hover/active feedback for current rack cells */
 .scoreboard td.current-rack:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 184, 77, 0.5), 
+              0 6px 12px rgba(0,0,0,0.1);
+}
+
+@keyframes pulse-rack {
+  0% { box-shadow: inset 0 0 0 1px rgba(255, 184, 77, 0.5), 0 0 0 2px #ffb84d; }
+  50% { box-shadow: inset 0 0 0 1px rgba(255, 184, 77, 1), 0 0 0 4px #ffb84d; }
+  100% { box-shadow: inset 0 0 0 1px rgba(255, 184, 77, 0.5), 0 0 0 2px #ffb84d; }
 }
 
 /* Make the vertical separator between the last rack and the Total column a double line.

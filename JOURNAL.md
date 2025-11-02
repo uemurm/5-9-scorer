@@ -5,7 +5,8 @@
 * [x] Make the current rack stand out.
 * [x] Set up configuration page and make this app a two-screen app.
 * [x] Select current player by drop-down list and re-arrange components.
-* [ ] Undo score inputs.
+* [x] Undo score inputs.
+* [x] Double the score in the next rack if all players get the same score.
 * [ ] Show start time
 * [ ] Configure
   * [x] Player names
@@ -17,7 +18,9 @@
 ## 2025-11-02 Sun
 MSYS2 をインストールして fish shell を Windows Terminal で使えるようにしたら、HTTP アクセスする度にエラーが出る。MSYS2 で `npm install` した時に以前にインストールしたパッケージを干渉してしまっているので、もとに戻したうえで、コマンド・プロンプトで開発を続けることにした。
 
-見た目を調整した。
+- 見た目を調整した。
+- Undo score inputs.
+- Double the score in the next rack if all players get the same score.
 
 ## 2025-10-31 Fri
 - Develop setup page and make this app a two-screen app.

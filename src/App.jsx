@@ -56,6 +56,7 @@ function App() {
   const [rackNumber, setRackNumber] = useState(1);
   const [gameOver, setGameOver] = useState(false);
   const [lastScoreAction, setLastScoreAction] = useState(null);
+  const [scoreMultiplier, setScoreMultiplier] = useState(1);
 
   // Note: in-game cycling of presets is intentionally disabled — presets are changed on Setup page only.
 
@@ -113,6 +114,7 @@ function App() {
       }));
       setPlayers(initial);
       setRackNumber(1);
+      setScoreMultiplier(1);
       setGameOver(false);
     }
     // 構成に変更がなければ、既存のゲーム状態を維持したままページを切り替えるだけ
@@ -146,7 +148,7 @@ function App() {
     // If a specific scoringBall was provided (from the Score page radio), use it; otherwise derive representative
     const ballToUse = scoringBall || getRepresentativeBall(players[playerIndex].selectedBallSet || ['5-ball', '7-ball', '9-ball']);
     const points = BALLS.find(b => b.id === ballToUse)?.basePoints || 1;
-    const finalPoints = isSidePocket ? points * 2 : points;
+    const finalPoints = (isSidePocket ? points * 2 : points) * scoreMultiplier;
 
     // Store action for undo
     const otherPlayerIndices = players.map((_, i) => i).filter(i => i !== playerIndex);
@@ -194,12 +196,25 @@ function App() {
   const handleNewGame = () => {
   // Reset only scores and pocket history. Keep player names and their selected presets from Setup.
   setPlayers(players.map(p => ({ ...p, scores: Array(maxRacks).fill(0), pocketHistory: Array(maxRacks).fill().map(() => []) })));
+    setScoreMultiplier(1);
     setLastScoreAction(null);
     setRackNumber(1);
     setGameOver(false);
   };
 
   const handleNextRack = () => {
+    // Check if all players have the same score in the current rack
+    if (players.length > 1) {
+      const currentRackScores = players.map(p => p.scores[rackNumber - 1]);
+      const allScoresAreEqual = currentRackScores.every(score => score === currentRackScores[0]);
+
+      if (allScoresAreEqual) {
+        setScoreMultiplier(prev => prev * 2);
+      } else {
+        setScoreMultiplier(1);
+      }
+    }
+
     if (rackNumber + 1 > maxRacks) {
       setGameOver(true);
     } else {
@@ -276,7 +291,12 @@ function App() {
               <tr>
                 <th>Player</th>
                 {Array.from({ length: maxRacks }, (_, i) => i + 1).map(rack => (
-                  <th key={rack} className={rack === rackNumber ? 'current-rack' : ''}>Rack {rack}</th>
+                  <th key={rack} className={rack === rackNumber ? 'current-rack' : ''}>
+                    Rack {rack}
+                    {rack === rackNumber && scoreMultiplier > 1 && (
+                      <span className="multiplier-badge">x{scoreMultiplier}</span>
+                    )}
+                  </th>
                 ))}
                 <th>Total</th>
               </tr>
