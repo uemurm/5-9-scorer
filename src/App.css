@@ -395,6 +395,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  min-height: 22px; /* code-badgeの高さを確保 */
 }
 
 .code-badge {

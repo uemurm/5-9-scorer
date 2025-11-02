@@ -32,26 +32,26 @@ function App() {
   };
 
   const [players, setPlayers] = useState([
-    { name: '鈴木', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
-    { name: '山梨', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
-    { name: '植村', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
+    { name: '鈴木', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '7-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
+    { name: '山梨', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '7-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
+    { name: '植村', scores: Array(5).fill(0), selectedBallSet: ['5-ball', '7-ball', '9-ball'], pocketHistory: Array(5).fill().map(() => []) },
   ]);
 
   // Score page: currently active player for scoring and selected scoring ball
   const [activePlayerIndex, setActivePlayerIndex] = useState(0);
-  const [activeScoringBall, setActiveScoringBall] = useState(() => getRepresentativeBall(['5-ball','9-ball']));
+  const [activeScoringBall, setActiveScoringBall] = useState(() => getRepresentativeBall(['5-ball', '7-ball', '9-ball']));
 
   // Keep activeScoringBall in sync whenever the active player or their preset changes
   useEffect(() => {
-    const set = players[activePlayerIndex]?.selectedBallSet || ['5-ball','9-ball'];
+    const set = players[activePlayerIndex]?.selectedBallSet || ['5-ball', '7-ball', '9-ball'];
     setActiveScoringBall(getRepresentativeBall(set));
   }, [activePlayerIndex, players]);
 
   // setup state: temporary list of players with names and selected balls (order matters)
   const [setupPlayers, setSetupPlayers] = useState([
-    { name: '鈴木', selectedBallSet: ['5-ball', '9-ball'] },
-    { name: '山梨', selectedBallSet: ['5-ball', '9-ball'] },
-    { name: '植村', selectedBallSet: ['5-ball', '9-ball'] },
+    { name: '鈴木', selectedBallSet: ['5-ball', '7-ball', '9-ball'] },
+    { name: '山梨', selectedBallSet: ['5-ball', '7-ball', '9-ball'] },
+    { name: '植村', selectedBallSet: ['5-ball', '7-ball', '9-ball'] },
   ]);
   const [rackNumber, setRackNumber] = useState(1);
   const [gameOver, setGameOver] = useState(false);
@@ -65,7 +65,7 @@ function App() {
     while (newSetup.length < n) {
       newSetup.push({ 
         name: `Player ${newSetup.length + 1}`, 
-        selectedBallSet: ['5-ball', '9-ball'] 
+        selectedBallSet: ['5-ball', '7-ball', '9-ball'] 
       });
     }
     while (newSetup.length > n) newSetup.pop();
@@ -80,7 +80,7 @@ function App() {
 
   const handleSetupCyclePreset = (index) => {
     const s = [...setupPlayers];
-    const current = s[index].selectedBallSet || ['5-ball', '9-ball'];
+    const current = s[index].selectedBallSet || ['5-ball', '7-ball', '9-ball'];
     const idx = PRESETS.findIndex(p => arraysEqual(p, current));
     const next = PRESETS[(idx + 1) % PRESETS.length];
     s[index].selectedBallSet = next;
@@ -108,7 +108,7 @@ function App() {
       const initial = setupPlayers.map(p => ({
         name: p.name,
         scores: Array(maxRacks).fill(0),
-        selectedBallSet: p.selectedBallSet || ['5-ball', '9-ball'],
+        selectedBallSet: p.selectedBallSet || ['5-ball', '7-ball', '9-ball'],
         pocketHistory: Array(maxRacks).fill().map(() => [])
       }));
       setPlayers(initial);
@@ -121,7 +121,7 @@ function App() {
 
   const backToSetup = () => {
     // populate setupPlayers from current players
-    setSetupPlayers(players.map(p => ({ name: p.name, selectedBallSet: p.selectedBallSet || ['5-ball', '9-ball'] })));
+    setSetupPlayers(players.map(p => ({ name: p.name, selectedBallSet: p.selectedBallSet || ['5-ball', '7-ball', '9-ball'] })));
     setPage('setup');
     setLastScoreAction(null); // Clear undo history when going to setup
   };
@@ -144,7 +144,7 @@ function App() {
   const handleScore = (playerIndex, isSidePocket, scoringBall) => {
     if (gameOver) return;
     // If a specific scoringBall was provided (from the Score page radio), use it; otherwise derive representative
-    const ballToUse = scoringBall || getRepresentativeBall(players[playerIndex].selectedBallSet || ['5-ball','9-ball']);
+    const ballToUse = scoringBall || getRepresentativeBall(players[playerIndex].selectedBallSet || ['5-ball', '7-ball', '9-ball']);
     const points = BALLS.find(b => b.id === ballToUse)?.basePoints || 1;
     const finalPoints = isSidePocket ? points * 2 : points;
 
@@ -181,7 +181,7 @@ function App() {
 
     // After scoring: if the ball used wasn't 9-ball, advance the activeScoringBall to the next larger ball in that player's preset (if any)
     if (ballToUse !== '9-ball') {
-      const set = players[playerIndex].selectedBallSet || ['5-ball','9-ball'];
+      const set = players[playerIndex].selectedBallSet || ['5-ball', '7-ball', '9-ball'];
       const idx = set.indexOf(ballToUse);
       if (idx >= 0 && idx < set.length - 1) {
         const next = set[idx + 1];
@@ -244,7 +244,7 @@ function App() {
                   placeholder="Player name"
                 />
                 <button className="preset-button" onClick={() => handleSetupCyclePreset(i)}>
-                  {(player.selectedBallSet || ['5-ball','9-ball']).map(b => b.charAt(0)).join('-')}
+                  {(player.selectedBallSet || ['5-ball', '7-ball', '9-ball']).map(b => b.charAt(0)).join('-')}
                 </button>
                 <div className="setup-controls">
                   <button onClick={() => moveSetupPlayer(i, -1)} disabled={i === 0}>↑</button>
@@ -323,7 +323,7 @@ function App() {
                 </select>
               </label>
               <div className="ball-selection" style={{display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', padding: '0 12px', borderLeft: '1px solid #eee', borderRight: '1px solid #eee'}}>
-                {(players[activePlayerIndex]?.selectedBallSet || ['5-ball','9-ball']).map(b => (
+                {(players[activePlayerIndex]?.selectedBallSet || ['5-ball', '7-ball', '9-ball']).map(b => (
                   <label key={b} className={`badge-radio ${activeScoringBall === b ? 'selected' : ''}`}>
                     <input
                       type="radio"
