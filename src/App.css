@@ -102,6 +102,7 @@ body {
     padding: 0 12px;
     border-left: 1px solid #eee;
     border-right: 1px solid #eee;
+    min-width: 208px; /* 4 buttons (3-5-7-9) + gaps + padding */
   }
   .scoring-panel .player-controls {
   display: flex;
@@ -192,9 +193,6 @@ body {
   border: 1px solid #666;
   background-color: #fff;
   color: #666;
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
   margin: 0;
   z-index: 10;
 }
@@ -202,7 +200,7 @@ body {
 /* Back to SetupボタンをタイトルとScoreboardの間の左端に、Reset Gameボタンと同じサイズで */
 .reset-button.back-setup {
   position: absolute;
-  left: 0;
+  left: 20px;
   width: 150px;
   height: 50px;
   top: 90px; /* タイトルとScoreboardの間の高さ。必要に応じて微調整 */
@@ -249,7 +247,7 @@ body {
 /* Next RackボタンをCorner/Sideボタンと同じ高さ右端に */
 .next-rack-button.inline {
   position: absolute;
-  right: 0;
+  right: 20px;
   top: 0;
   transform: translateY(0);
   margin: 0;
@@ -432,7 +430,19 @@ body {
   border: 1px solid #ccc;
   font-size: 14px;
 }
+.preset-button {
+  min-width: 80px; /* Ensure all preset buttons have the same width */
+  text-align: center;
+  padding: 6px 8px;
+}
 
 .setup-controls button {
   margin-left: 6px;
+}
+.reset-button-container {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
 }

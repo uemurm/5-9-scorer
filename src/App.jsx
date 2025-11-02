@@ -293,7 +293,7 @@ function App() {
                   ))}
                 </select>
               </label>
-              <div className="ball-selection" style={{display: 'flex', gap: '8px', alignItems: 'center', padding: '0 12px', borderLeft: '1px solid #eee', borderRight: '1px solid #eee'}}>
+              <div className="ball-selection" style={{display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', padding: '0 12px', borderLeft: '1px solid #eee', borderRight: '1px solid #eee'}}>
                 {(players[activePlayerIndex]?.selectedBallSet || ['5-ball','9-ball']).map(b => (
                   <label key={b} className={`badge-radio ${activeScoringBall === b ? 'selected' : ''}`}>
                     <input
@@ -307,7 +307,7 @@ function App() {
                   </label>
                 ))}
               </div>
-              <div className="player-controls" style={{display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center'}}>
+              <div className="player-controls" style={{display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'stretch'}}>
                 <button onClick={() => handleScore(activePlayerIndex, false, activeScoringBall)}>Corner</button>
                 <button onClick={() => handleScore(activePlayerIndex, true, activeScoringBall)}>Side</button>
               </div>
@@ -316,9 +316,11 @@ function App() {
           </div>
         </div>
       </div>
-      <button onClick={() => {
-        if(window.confirm('本当にリセットしますか？')) handleNewGame();
-      }} className="reset-button">Reset Game</button>
+      <div className="reset-button-container">
+        <button onClick={() => {
+          if(window.confirm('本当にリセットしますか？')) handleNewGame();
+        }} className="reset-button">Reset Game</button>
+      </div>
     </div>
   );
 }
