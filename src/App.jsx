@@ -57,6 +57,7 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
   const [lastScoreAction, setLastScoreAction] = useState(null);
   const [scoreMultiplier, setScoreMultiplier] = useState(1);
+  const [gameStartTime, setGameStartTime] = useState(null);
 
   // Note: in-game cycling of presets is intentionally disabled — presets are changed on Setup page only.
 
@@ -105,7 +106,7 @@ function App() {
       );
 
     // 構成が変更されているか、まだゲームが始まっていない場合のみ状態を初期化
-    if (configChanged || players.length === 0) {
+    if (configChanged || gameStartTime === null) {
       const initial = setupPlayers.map(p => ({
         name: p.name,
         scores: Array(maxRacks).fill(0),
@@ -115,6 +116,7 @@ function App() {
       setPlayers(initial);
       setRackNumber(1);
       setScoreMultiplier(1);
+      setGameStartTime(new Date());
       setGameOver(false);
     }
     // 構成に変更がなければ、既存のゲーム状態を維持したままページを切り替えるだけ
@@ -227,6 +229,19 @@ function App() {
 
   const totalScores = players.map(p => p.scores.reduce((a, b) => a + b, 0));
 
+  const formatDateTime = (date) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayOfWeek = days[date.getDay()];
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${year}-${month}-${day} ${dayOfWeek} ${hours}:${minutes}:${seconds}`;
+  };
+
   if (page === 'setup') {
     return (
       <div className="app-container">
@@ -282,10 +297,17 @@ function App() {
       <h1 style={{textAlign: 'center', margin: '0 auto 16px auto'}}>
         5-9 Scorer
       </h1>
+      {gameStartTime && (
+        <div className="start-time">
+          Start: {formatDateTime(gameStartTime)}
+        </div>
+      )}
       <button onClick={backToSetup} className="reset-button back-setup">Back to Setup</button>
       <div className="main-content">
         <div className="scoreboard">
-          <h3>Scoreboard</h3>
+          <div className="scoreboard-header">
+            <h3>Scoreboard</h3>
+          </div>
           <table>
             <thead>
               <tr>

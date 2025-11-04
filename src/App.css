@@ -51,6 +51,19 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+.scoreboard-header {
+  margin-bottom: 12px;
+}
+.scoreboard-header h3 {
+  margin: 0;
+}
+.start-time {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 0.9em;
+  color: #555;
+}
 
 .player-name-input {
   font-size: 1.5em;
