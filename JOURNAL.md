@@ -7,13 +7,19 @@
 * [x] Select current player by drop-down list and re-arrange components.
 * [x] Undo score inputs.
 * [x] Double the score in the next rack if all players get the same score.
-* [ ] Show start time
+* [ ] Manage ball-selection after each pocketing.
+* [ ] Support portrait mode.
+* [x] Show start time.
+* [ ] Show end time.
 * [ ] Configure
   * [x] Player names
   * [x] Player order
   * [ ] Reverse order
   * [x] Rack count
   * [x] Point balls for each player
+
+## 2025-11-04 Tue
+Show start time.
 
 ## 2025-11-02 Sun
 MSYS2 をインストールして fish shell を Windows Terminal で使えるようにしたら、HTTP アクセスする度にエラーが出る。MSYS2 で `npm install` した時に以前にインストールしたパッケージを干渉してしまっているので、もとに戻したうえで、コマンド・プロンプトで開発を続けることにした。
