@@ -65,6 +65,14 @@ body {
   color: #555;
 }
 
+.end-time {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  font-size: 0.9em;
+  color: #555;
+}
+
 .player-name-input {
   font-size: 1.5em;
   font-weight: bold;
@@ -391,6 +399,18 @@ body {
   0% { box-shadow: inset 0 0 0 1px rgba(255, 184, 77, 0.5), 0 0 0 2px #ffb84d; }
   50% { box-shadow: inset 0 0 0 1px rgba(255, 184, 77, 1), 0 0 0 4px #ffb84d; }
   100% { box-shadow: inset 0 0 0 1px rgba(255, 184, 77, 0.5), 0 0 0 2px #ffb84d; }
+}
+
+/* Highlight Total column when game is finished */
+.scoreboard th.game-finished,
+.scoreboard td.game-finished {
+  background: linear-gradient(180deg, #fff5d6, #ffebac);
+  background: linear-gradient(180deg, #ffe494, #ffc94d);
+  font-weight: 800;
+  color: #5a3200;
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(255, 184, 77, 0.5), 
+              0 0 0 2px #ffb84d;
 }
 
 /* Make the vertical separator between the last rack and the Total column a double line.

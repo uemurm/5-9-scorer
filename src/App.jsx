@@ -67,6 +67,8 @@ function App() {
   const [lastScoreAction, setLastScoreAction] = useState(null);
   const [scoreMultiplier, setScoreMultiplier] = useState(1);
   const [gameStartTime, setGameStartTime] = useState(null);
+  const [gameEndTime, setGameEndTime] = useState(null);
+  const [gameFinished, setGameFinished] = useState(false);
 
   // Note: in-game cycling of presets is intentionally disabled — presets are changed on Setup page only.
 
@@ -127,6 +129,8 @@ function App() {
       setScoreMultiplier(1);
       setGameStartTime(new Date());
       setGameOver(false);
+      setGameEndTime(null);
+      setGameFinished(false);
     }
     // 構成に変更がなければ、既存のゲーム状態を維持したままページを切り替えるだけ
     setPage('game');
@@ -207,6 +211,8 @@ function App() {
     setLastScoreAction(null);
     setRackNumber(1);
     setGameOver(false);
+    setGameEndTime(null);
+    setGameFinished(false);
     // Ensure the badge-radio shows 5-ball immediately after Reset confirmation.
     skipAutoSelectRef.current = true;
     setActiveScoringBall('5-ball');
@@ -226,6 +232,8 @@ function App() {
     }
 
     if (rackNumber + 1 > maxRacks) {
+      setGameEndTime(new Date());
+      setGameFinished(true);
       setGameOver(true);
     } else {
       setRackNumber(rackNumber + 1);
@@ -313,6 +321,11 @@ function App() {
           Start: {formatDateTime(gameStartTime)}
         </div>
       )}
+      {gameEndTime && (
+        <div className="end-time">
+          End: {formatDateTime(gameEndTime)}
+        </div>
+      )}
       <button onClick={backToSetup} className="reset-button back-setup">Back to Setup</button>
       <div className="main-content">
         <div className="scoreboard">
@@ -324,14 +337,14 @@ function App() {
               <tr>
                 <th>Player</th>
                 {Array.from({ length: maxRacks }, (_, i) => i + 1).map(rack => (
-                  <th key={rack} className={rack === rackNumber ? 'current-rack' : ''}>
+                  <th key={rack} className={rack === rackNumber && !gameFinished ? 'current-rack' : ''}>
                     Rack {rack}
                     {rack === rackNumber && scoreMultiplier > 1 && (
                       <span className="multiplier-badge">x{scoreMultiplier}</span>
                     )}
                   </th>
                 ))}
-                <th>Total</th>
+                <th className={gameFinished ? 'game-finished' : ''}>Total</th>
               </tr>
             </thead>
             <tbody>
@@ -348,7 +361,7 @@ function App() {
                   {player.scores.map((score, rackIndex) => {
                     const pocketArr = player.pocketHistory && player.pocketHistory[rackIndex] ? player.pocketHistory[rackIndex] : [];
                     return (
-                      <td key={rackIndex} className={(rackIndex + 1 === rackNumber ? 'current-rack ' : '') + 'score-cell'}>
+                      <td key={rackIndex} className={(rackIndex + 1 === rackNumber && !gameFinished ? 'current-rack ' : '') + 'score-cell'}>
                         <div className="cell-top">{score}</div>
                         <div className="cell-bottom">
                           {pocketArr.map((d, i) => (
@@ -358,7 +371,7 @@ function App() {
                       </td>
                     );
                   })}
-                  <td>{totalScores[playerIndex]}</td>
+                  <td className={gameFinished ? 'game-finished' : ''}>{totalScores[playerIndex]}</td>
                 </tr>
               ))}
             </tbody>
@@ -394,7 +407,7 @@ function App() {
                 <button onClick={() => handleScore(activePlayerIndex, true, activeScoringBall)}>Side</button>
               </div>
               <button onClick={handleUndo} className="undo-button" disabled={!lastScoreAction}>Undo</button>
-              <button onClick={handleNextRack} className="next-rack-button inline">Next Rack</button>
+              <button onClick={handleNextRack} className="next-rack-button inline">{rackNumber === maxRacks ? 'Finish' : 'Next Rack'}</button>
             </div>
           </div>
         </div>
