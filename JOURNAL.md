@@ -17,6 +17,11 @@
   * [ ] Reverse order
   * [x] Rack count
   * [x] Point balls for each player
+* [ ] Set favicon.
+* [ ] Set page name.
+
+## 2025-11-16 Sun
+昨夜、実際に使ってみて、タブレットの充電の持ち以外で大きな問題は無いことが確認できた。
 
 ## 2025-11-04 Tue
 Show start time.
