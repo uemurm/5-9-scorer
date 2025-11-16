@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 function App() {
@@ -41,8 +41,17 @@ function App() {
   const [activePlayerIndex, setActivePlayerIndex] = useState(0);
   const [activeScoringBall, setActiveScoringBall] = useState(() => getRepresentativeBall(['5-ball', '7-ball', '9-ball']));
 
+  // Ref used to skip the one-time automatic selection when we explicitly set the active ball
+  const skipAutoSelectRef = useRef(false);
+
   // Keep activeScoringBall in sync whenever the active player or their preset changes
   useEffect(() => {
+    // If a caller requested to skip this automatic selection, honor it once
+    if (skipAutoSelectRef.current) {
+      skipAutoSelectRef.current = false;
+      return;
+    }
+
     const set = players[activePlayerIndex]?.selectedBallSet || ['5-ball', '7-ball', '9-ball'];
     setActiveScoringBall(getRepresentativeBall(set));
   }, [activePlayerIndex, players]);
@@ -121,6 +130,9 @@ function App() {
     }
     // 構成に変更がなければ、既存のゲーム状態を維持したままページを切り替えるだけ
     setPage('game');
+    // Ensure badge-radio resets to 5-ball immediately after starting game
+    skipAutoSelectRef.current = true;
+    setActiveScoringBall('5-ball');
   };
 
   const backToSetup = () => {
@@ -140,7 +152,9 @@ function App() {
     newPlayers[playerIndex].pocketHistory[rackNumber - 1].pop();
     otherPlayerIndices.forEach(idx => { newPlayers[idx].scores[rackNumber - 1] += finalPoints; });
 
-    setPlayers(newPlayers);
+  // Preserve the currently selected ball: prevent the auto-sync effect from overriding
+  skipAutoSelectRef.current = true;
+  setPlayers(newPlayers);
     setActiveScoringBall(previousActiveScoringBall);
     setLastScoreAction(null); // Only one level of undo
   };
@@ -183,16 +197,7 @@ function App() {
 
     setPlayers(newPlayers);
 
-    // After scoring: if the ball used wasn't 9-ball, advance the activeScoringBall to the next larger ball in that player's preset (if any)
-    if (ballToUse !== '9-ball') {
-      const set = players[playerIndex].selectedBallSet || ['5-ball', '7-ball', '9-ball'];
-      const idx = set.indexOf(ballToUse);
-      if (idx >= 0 && idx < set.length - 1) {
-        const next = set[idx + 1];
-        setActiveScoringBall(next);
-      }
-      // if not found or already last, leave as-is
-    }
+    // Do not change the selected ball after scoring; keep the user's selection as-is.
   };
 
   const handleNewGame = () => {
@@ -202,6 +207,9 @@ function App() {
     setLastScoreAction(null);
     setRackNumber(1);
     setGameOver(false);
+    // Ensure the badge-radio shows 5-ball immediately after Reset confirmation.
+    skipAutoSelectRef.current = true;
+    setActiveScoringBall('5-ball');
   };
 
   const handleNextRack = () => {
@@ -222,6 +230,9 @@ function App() {
     } else {
       setRackNumber(rackNumber + 1);
       setLastScoreAction(null); // Clear undo history on next rack
+      // Ensure the badge-radio shows 5-ball immediately after moving to next rack
+      skipAutoSelectRef.current = true;
+      setActiveScoringBall('5-ball');
     }
   };
 

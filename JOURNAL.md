@@ -8,6 +8,8 @@
 * [x] Undo score inputs.
 * [x] Double the score in the next rack if all players get the same score.
 * [ ] Manage ball-selection after each pocketing.
+  * [x] Select 5-ball when starting a game, proceeding to next rack or resetting game.
+  * [ ] Preserve ball selection after each pocketing.
 * [ ] Support portrait mode.
 * [x] Show start time.
 * [ ] Show end time.
@@ -18,10 +20,11 @@
   * [x] Rack count
   * [x] Point balls for each player
 * [ ] Set favicon.
-* [ ] Set page name.
+* [x] Set page name.
 
 ## 2025-11-16 Sun
 昨夜、実際に使ってみて、タブレットの充電の持ち以外で大きな問題は無いことが確認できた。
+- Select 5-ball when starting a game, rack, or resetting the game.
 
 ## 2025-11-04 Tue
 Show start time.
