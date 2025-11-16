@@ -287,6 +287,7 @@ body {
 .undo-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .next-rack-button {
@@ -299,10 +300,19 @@ body {
   color: #333;
   margin-left: 10px;
   margin-top: 20px;
+  box-sizing: border-box;
 }
 
 .next-rack-button:hover {
   background-color: #ccc;
+}
+
+.next-rack-button:disabled {
+  background-color: #bbb;
+  cursor: not-allowed;
+  opacity: 0.5;
+  color: #666;
+  border: 1px solid #333;
 }
 
 .game-over-announcement {

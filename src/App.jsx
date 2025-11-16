@@ -406,8 +406,8 @@ function App() {
                 <button onClick={() => handleScore(activePlayerIndex, false, activeScoringBall)}>Corner</button>
                 <button onClick={() => handleScore(activePlayerIndex, true, activeScoringBall)}>Side</button>
               </div>
-              <button onClick={handleUndo} className="undo-button" disabled={!lastScoreAction}>Undo</button>
-              <button onClick={handleNextRack} className="next-rack-button inline">{rackNumber === maxRacks ? 'Finish' : 'Next Rack'}</button>
+              <button onClick={handleUndo} className="undo-button" disabled={!lastScoreAction || gameFinished}>Undo</button>
+              <button onClick={handleNextRack} className="next-rack-button inline" disabled={gameFinished}>{rackNumber === maxRacks ? 'Finish' : 'Next Rack'}</button>
             </div>
           </div>
         </div>
