@@ -3,6 +3,7 @@ import './App.css';
 import ConfirmDialog from './ConfirmDialog';
 
 function App() {
+  const APP_TITLE = '5-9 Scorer';
   // page: 'setup' | 'game'
   const [page, setPage] = useState('setup');
   const [maxRacks, setMaxRacks] = useState(5);
@@ -45,6 +46,10 @@ function App() {
 
   // Ref used to skip the one-time automatic selection when we explicitly set the active ball
   const skipAutoSelectRef = useRef(false);
+
+  useEffect(() => {
+    document.title = APP_TITLE;
+  }, []);
 
   // Keep activeScoringBall in sync whenever the active player or their preset changes
   useEffect(() => {
@@ -269,7 +274,7 @@ function App() {
   if (page === 'setup') {
     return (
       <div className="app-container">
-        <h1>5-9 Scorer — Setup</h1>
+        <h1>{APP_TITLE} — Setup</h1>
         <div className="setup-panel">
           <label>
             Number of players: 
@@ -319,7 +324,7 @@ function App() {
   return (
     <div className="app-container">
       <h1 style={{textAlign: 'center', margin: '0 auto 16px auto'}}>
-        5-9 Scorer
+        {APP_TITLE}
       </h1>
       {gameStartTime && (
         <div className="start-time">
@@ -428,7 +433,7 @@ function App() {
           setShowResetConfirm(false);
         }}
         onCancel={() => setShowResetConfirm(false)}
-        title="5-9 Scorer"
+        title={APP_TITLE}
       >
         本当にリセットしますか？
       </ConfirmDialog>
