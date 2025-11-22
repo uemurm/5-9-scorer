@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
+import ConfirmDialog from './ConfirmDialog';
 
 function App() {
   // page: 'setup' | 'game'
   const [page, setPage] = useState('setup');
   const [maxRacks, setMaxRacks] = useState(5);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   // Define available balls and their base point values
   const BALLS = [
@@ -416,10 +418,20 @@ function App() {
         </div>
       </div>
       <div className="reset-button-container">
-        <button onClick={() => {
-          if(window.confirm('本当にリセットしますか？')) handleNewGame();
-        }} className="reset-button">Reset Game</button>
+        <button onClick={() => setShowResetConfirm(true)} className="reset-button">Reset Game</button>
       </div>
+
+      <ConfirmDialog
+        isOpen={showResetConfirm}
+        onConfirm={() => {
+          handleNewGame();
+          setShowResetConfirm(false);
+        }}
+        onCancel={() => setShowResetConfirm(false)}
+        title="5-9 Scorer"
+      >
+        本当にリセットしますか？
+      </ConfirmDialog>
     </div>
   );
 }
