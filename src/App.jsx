@@ -215,6 +215,7 @@ function App() {
     setGameOver(false);
     setGameEndTime(null);
     setGameFinished(false);
+    setGameStartTime(new Date());
     // Ensure the badge-radio shows 5-ball immediately after Reset confirmation.
     skipAutoSelectRef.current = true;
     setActiveScoringBall('5-ball');
