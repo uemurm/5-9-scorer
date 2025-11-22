@@ -199,6 +199,8 @@ function App() {
       player.scores[rackNumber - 1] -= finalPoints;
     });
 
+    // Preserve the currently selected ball: prevent the auto-sync effect from overriding the user's choice
+    skipAutoSelectRef.current = true;
     setPlayers(newPlayers);
 
     // Do not change the selected ball after scoring; keep the user's selection as-is.
