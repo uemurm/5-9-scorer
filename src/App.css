@@ -522,3 +522,10 @@ body {
   padding-right: 20px;
   padding-bottom: 20px;
 }
+
+.version-info {
+  padding: 20px;
+  color: #888;
+  font-size: 0.8em;
+  text-align: center;
+}

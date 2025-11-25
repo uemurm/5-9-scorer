@@ -426,6 +426,10 @@ function App() {
         <button onClick={() => setShowResetConfirm(true)} className="reset-button">Reset Game</button>
       </div>
 
+      <div className="version-info">
+        v{import.meta.env.VITE_APP_VERSION} ({import.meta.env.VITE_COMMIT_HASH})
+      </div>
+
       <ConfirmDialog
         isOpen={showResetConfirm}
         onConfirm={() => {
